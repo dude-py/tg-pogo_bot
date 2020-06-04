@@ -7,6 +7,7 @@ logger.info("Starting")
 
 class Bot:
     """ Клас для взаємодії із зовнішнім світом """
+    bot_cmd = {}
 
     def __init__(self):
         from BotApi import getWebhookInfo, setWebhook
@@ -20,6 +21,47 @@ class Bot:
                 setWebhook(config.tg_webhook)
             logger.info("webhook alredy set")
 
-    def setUpdate(self):
+    def setUpdate(self, data):
         """ Цей метод слід викликати коли приходить оновлення на вебхук """
+        # parse data
+        command = data['result']['bot_command'] if 'bot_command' in data['result'].keys(
+        ) else ''
+
+        # run command
+        if command in self.bot_cmd.keys():
+            self.bot_cmd[command]()
+
+    def addCmd(self, cmd):
+        """ декоратор реєстрації команд для бота """
+        def wrapped(func):
+            bot_cmd[cmd] = func
+        return wrapped
+
+
+class BotCmds:
+    """ Команди бота """
+
+    def __init__(self):
+        super().__init__()
+
+    @Bot.addCmd('showme')
+    def showme(self):
+        """ покаже дані про покемона """
         pass
+
+    @Bot.addCmd('raidbosses')
+    def raidbosses(self):
+        """ активні рейд боси """
+        pass
+
+    @Bot.addCmd('quests')
+    def quests(self):
+        """ активні квести """
+        pass
+
+
+class BotCmdForAdmins:
+    """ адмінка для бота через команди для бота """
+
+    def __init__(self):
+        super().__init__()

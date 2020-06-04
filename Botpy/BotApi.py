@@ -10,6 +10,14 @@ logger.info("Starting")
 tg_url = BotConfig.tg_url + 'bot' + BotConfig.tg_api_key + '/'
 
 
+def _getData(url):
+    """ робить запит данних """
+    try:
+        result = requests.get(url)
+        return result.text
+    except requests.RequestException as e:
+        logger.info("Error get data: " + str(e))
+
 def getMe():
     """
     A simple method for testing the bot auth token.
@@ -18,7 +26,7 @@ def getMe():
     """
     url = tg_url + "getMe"
     return(
-        json.loads(requests.get(url).text)
+        json.loads(_getData(url))
     )
 
 
@@ -30,7 +38,7 @@ def sendMesg(chat_id, text):
     """
     url = tg_url + "sendMessage?chat_id={}&text={}".format(chat_id, text)
     return(
-        json.loads(requests.get(url).text)
+        json.loads(_getData(url))
     )
 
 
@@ -45,7 +53,7 @@ def sendPhoto(chat_id, photo, caption=""):
     """
     url = tg_url + "sendPhoto?chat_id{}".format(chat_id)
     return(
-        json.loads(requests.get(url).text)
+        json.loads(_getData(url))
         )
 
 
@@ -66,5 +74,5 @@ def getWebhookInfo():
     """
     url = tg_url + "getWebhookInfo"
     return(json.loads(
-        requests.get(url).text
+        _getData(url)
     ))
