@@ -7,7 +7,7 @@ logger.info("Starting")
 
 class Bot:
     """ Клас для взаємодії із зовнішнім світом """
-    bot_cmd = {}
+    bot_cmd = {}  # bot command and there function
 
     def __init__(self):
         from BotApi import getWebhookInfo, setWebhook
@@ -34,15 +34,14 @@ class Bot:
     def addCmd(self, cmd):
         """ декоратор реєстрації команд для бота """
         def wrapped(func):
-            bot_cmd[cmd] = func
+            self.bot_cmd[cmd] = func
         return wrapped
 
 
 class BotCmds:
     """ Команди бота """
 
-    def __init__(self):
-        super().__init__()
+    Bot = Bot()
 
     @Bot.addCmd('showme')
     def showme(self):
